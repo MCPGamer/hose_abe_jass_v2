@@ -14,6 +14,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.classpath
+.project
 
 # External tool builders
 .externalToolBuilders/
@@ -262,6 +264,7 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 mvnw.*
+mvnw
 .mvn/*
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,git,tortoisegit,java,intellij,eclipse,maven
