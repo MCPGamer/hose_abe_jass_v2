@@ -1,11 +1,6 @@
 package ch.zli.hose_abe_jass_backend.model;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.ApplicationScope;
-
-@Service
-@ApplicationScope
-public class GameService {
+public class GameHandler {
 	private Room room;
 
 	public Room getRoom() {

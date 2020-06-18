@@ -10,7 +10,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 @ApplicationScope
 public class RoomService {
 	@Autowired
-	private ArrayList<GameService> gameServices = new ArrayList<>();
+	private ArrayList<GameHandler> gameHandlers = new ArrayList<>();
 	
 	//TODO: All Methods for Creating / Joining rooms go here
 }
