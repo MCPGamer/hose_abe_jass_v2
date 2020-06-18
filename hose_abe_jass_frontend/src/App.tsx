@@ -1,25 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+
+export type pingRequest = {
+  ping:boolean
+};
 
 function App() {
+  const [fetchedData, setFetchedData] = useState<pingRequest>();
+
+  useEffect(() => {
+    fetch("http://localhost:8080/", {method:'Get'})
+        .then(result => result.json())
+        .then(data => setFetchedData(data));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        {fetchedData === undefined ? 'pinging' : fetchedData.ping ? 'Ping Successfull' : 'Ping Unsuccessfull' }
+      </div>
   );
 }
 
