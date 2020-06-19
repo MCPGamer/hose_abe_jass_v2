@@ -1,5 +1,6 @@
 package ch.zli.hose_abe_jass_backend.model;
 
+
 public class GameHandler {
 	private Room room;
 

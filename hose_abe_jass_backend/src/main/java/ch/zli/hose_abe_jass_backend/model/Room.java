@@ -6,6 +6,7 @@ public class Room {
 	private Player[] players = new Player[11];
 	private Card[] table = new Card[3];
 	private boolean finalRound = false;
+	private int playerturn;
 	
 	public Room(String roomCode, Player host) {
 		this.roomCode = roomCode;
@@ -50,5 +51,13 @@ public class Room {
 
 	public void setFinalRound(boolean finalRound) {
 		this.finalRound = finalRound;
+	}
+
+	public int getPlayerturn() {
+		return playerturn;
+	}
+
+	public void setPlayerturn(int playerturn) {
+		this.playerturn = playerturn;
 	}
 }
