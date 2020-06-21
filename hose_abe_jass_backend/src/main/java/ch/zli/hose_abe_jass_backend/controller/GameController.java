@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.zli.hose_abe_jass_backend.exception.JoinRoomException;
@@ -19,12 +18,12 @@ public class GameController {
 
 	// TODO: rest functions for this
 
-	@PostMapping("/joinRoom")
-	public Object joinRoom(@RequestBody String name, @RequestBody String roomCode) {
+	@PostMapping("/room/{name}/{roomCode}")
+	public Object joinRoom(@PathVariable String name, @PathVariable String roomCode) {
 		try {
 			return roomService.joinRoom(name, roomCode);
 		} catch (JoinRoomException ex) {
-			return ex.getErrorMessage();
+			return "{ \"error\": \""+ ex.getErrorMessage() + "\"}";
 		}
 	}
 	

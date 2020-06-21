@@ -63,7 +63,7 @@ public class RoomService {
 		}
 		
 		Player[] players = room.getPlayers();
-		for(int i = 0; i < 12; i++) {
+		for(int i = 0; i < 11; i++) {
 			if(players[i] == null) {
 				players[i] = new Player(name);
 				playerAdded = true;
@@ -76,12 +76,12 @@ public class RoomService {
 			}
 		}
 		
-		if(!playerAdded) {
-			throw new JoinRoomException("Room is already full");
-		}
-		
 		if(nameDuplicate) {
 			throw new JoinRoomException("A Player in that Room already has that Name");
+		}
+		
+		if(!playerAdded) {
+			throw new JoinRoomException("Room is already full");
 		}
 		
 		return room;
