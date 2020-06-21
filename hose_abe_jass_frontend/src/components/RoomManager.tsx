@@ -46,7 +46,7 @@ export const RoomManager: React.FC<Props> = (props) => {
                         <p>{props.errorMsg}</p>
                     </div>) : ''}
                 <div>
-                    <Button variant="outlined" onClick={handleOnCreate}>Create</Button>
+                    <Button variant="outlined" onClick={handleOnCreate} disabled={!username}>Create</Button>
                 </div>
             </fieldset>
         </form>

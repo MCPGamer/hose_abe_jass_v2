@@ -7,6 +7,7 @@ export const MainMenuContainer: React.FC = () => {
 
     const createRoom = (username : string) => {
         fetch(`http://localhost:8080/room/${username}`, {method: 'POST'}).then(response => response.json()).then(data => {
+            // TODO: Redirect to gamescreen using the returned "Room" Object
             console.log(data);
         });
     }
@@ -19,6 +20,7 @@ export const MainMenuContainer: React.FC = () => {
                     setJoinError(data.error);
                 } else {
                     setJoinError('');
+                    // TODO: Redirect to gamescreen using the returned "Room" Object
                     // Join Game
                 }
             });
