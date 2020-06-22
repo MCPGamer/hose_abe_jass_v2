@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Button, TextField} from '@material-ui/core';
-import './RoomManager.css'
-import {type} from "os";
+import './RoomManager.css';
 
 type Props = {
     onCreate: (username: string) => void;
