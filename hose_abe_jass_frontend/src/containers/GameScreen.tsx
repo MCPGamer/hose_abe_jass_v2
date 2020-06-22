@@ -15,7 +15,7 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
     return (
         <div className="center-form">
           <PlayerTable room={props.room} player={props.player}/>
-          you're in the game
+          {props.room.table && props.room.host.name !== props.player ? 'Waiting on Host to start the game' : 'Start the game as soon as everybody joined'}
           <RoomCode code={props.room.roomCode}/>
         </div>
     )
