@@ -39,9 +39,9 @@ public class GameController {
 		return roomService.createRoom(username);
 	}
 
-	@MessageMapping("/room")
+	@MessageMapping("/roomUpdate")
 	public void broadcastNews(@Payload String roomcode) {
 		System.out.println("Sending:" + roomcode);
-		this.simpMessagingTemplate.convertAndSend("/room", roomService.getRoomByCode(roomcode));
+		this.simpMessagingTemplate.convertAndSend("/roomUpdate", roomService.getRoomByCode(roomcode));
 	}
 }

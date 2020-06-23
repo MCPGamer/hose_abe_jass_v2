@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration extends AbstractWebSocketMessageBrokerConfigurer {
 
-	static final String MESSAGE_PREFIX = "/room";
+	static final String MESSAGE_PREFIX = "/roomUpdate";
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -21,7 +21,6 @@ public class WebSocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		registry.enableSimpleBroker(MESSAGE_PREFIX);
-		registry.setApplicationDestinationPrefixes("/app");
+		registry.enableSimpleBroker(MESSAGE_PREFIX);;
 	}
 }

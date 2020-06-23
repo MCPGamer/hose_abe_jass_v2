@@ -24,8 +24,12 @@ function App() {
     };
 
     const handleMessage = (stompMessage:Message) => {
-        console.log(stompMessage);
         const updatedRoom:Room = JSON.parse(stompMessage.body);
+        console.log('Stomp Message Recieved:')
+        console.log(stompMessage);
+        console.log('Room update:');
+        console.log(updatedRoom);
+
         if(room.roomCode === updatedRoom.roomCode){
             setRoom(updatedRoom);
         }
@@ -34,7 +38,7 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <StompClient endpoint={'ws://localhost:8080/room'} topic={'/room'} onMessage={handleMessage}>
+            <StompClient endpoint={'ws://localhost:8080/room'} topic={'roomUpdate'} onMessage={handleMessage}>
                 <div className="App">
                     {room === defaultRoom ?
                         (<MainMenuContainer setData={setData}/>)
