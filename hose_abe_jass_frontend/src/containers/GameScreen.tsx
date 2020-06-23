@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './GameScreen.css';
 import {Room} from '../models/room';
 import {RoomCode} from '../components/RoomCode';
@@ -12,6 +12,10 @@ type Props = {
 
 export const GameScreenContainer: React.FC<Props> = (props) => {
     const [enabled, setEnabled] = useState<boolean>(props.room.players[props.room.playerturn].name === props.player);
+
+    useEffect(() => {
+        setEnabled(props.room.players[props.room.playerturn].name === props.player);
+    }, [props.room, props.player])
 
     if (!props.backendUrl) {
         props.backendUrl = 'localhost:8080';
