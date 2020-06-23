@@ -11,7 +11,7 @@ import {Message} from "@stomp/stompjs";
 function App() {
     const [username, setUsername] = useState<string>('');
     const [room, setRoom] = useState<Room>(defaultRoom);
-    let backendUrl: String = 'localhost:8080'; //192.168.0.116
+    let backendUrl: String = 'localhost:8080';
 
     const theme = createMuiTheme({
         palette: {

@@ -20,7 +20,7 @@ export const PlayerTable: React.FC<Props> = (props) => {
                                 {p.name === props.player ? p.name + '(you)' : p.name}
                                 {props.revealCards ? p.cards.map((c) => (
                                     <image className={'small-card'}
-                                           href={'img/jasskarten/' + c.cardColor + c.cardValue + 'Klein.gif'}/>
+                                           href={'%PUBLIC_URL%/img/jasskarten/' + c.cardColor + c.cardValue + 'Klein.gif'}/>
                                 )) : ''}
                             </td>
                         </tr>
