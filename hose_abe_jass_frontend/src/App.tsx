@@ -6,11 +6,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {defaultRoom, Room} from './models/room';
 import {GameScreenContainer} from './containers/GameScreen';
 import StompClient from 'react-stomp-client';
-import { Message } from "@stomp/stompjs";
+import {Message} from "@stomp/stompjs";
 
 function App() {
     const [username, setUsername] = useState<string>('');
     const [room, setRoom] = useState<Room>(defaultRoom);
+    let backendUrl: String = 'localhost:8080'; //192.168.0.116
 
     const theme = createMuiTheme({
         palette: {
@@ -23,14 +24,14 @@ function App() {
         setRoom(room);
     };
 
-    const handleMessage = (stompMessage:Message) => {
-        const updatedRoom:Room = JSON.parse(stompMessage.body);
+    const handleMessage = (stompMessage: Message) => {
+        const updatedRoom: Room = JSON.parse(stompMessage.body);
         console.log('Stomp Message Recieved:')
         console.log(stompMessage);
         console.log('Room update:');
         console.log(updatedRoom);
 
-        if(room.roomCode === updatedRoom.roomCode){
+        if (room.roomCode === updatedRoom.roomCode) {
             setRoom(updatedRoom);
         }
     }
@@ -38,12 +39,12 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <StompClient endpoint={'ws://localhost:8080/room'} topic={'roomUpdate'} onMessage={handleMessage}>
+            <StompClient endpoint={`ws://${backendUrl}/room`} topic={'roomUpdate'} onMessage={handleMessage}>
                 <div className="App">
                     {room === defaultRoom ?
-                        (<MainMenuContainer setData={setData}/>)
+                        (<MainMenuContainer setData={setData} backendUrl={backendUrl}/>)
                         :
-                        (<GameScreenContainer room={room} player={username}/>)}
+                        (<GameScreenContainer room={room} player={username} backendUrl={backendUrl}/>)}
                 </div>
             </StompClient>
         </ThemeProvider>

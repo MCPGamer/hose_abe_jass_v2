@@ -4,36 +4,41 @@ import './MainMenu.css'
 import {Room} from '../models/room';
 
 type Props = {
-  setData: (username: string, room: Room) => void;
+    setData: (username: string, room: Room) => void;
+    backendUrl?: String;
 };
 
 export const MainMenuContainer: React.FC<Props> = (props) => {
     const [joinError, setJoinError] = useState<string>('');
 
-    const createRoom = (username : string) => {
-        fetch(`http://localhost:8080/room/${username}`, {method: 'POST'}).then(response => response.json()).then(data => {
-           console.log(data);
-           props.setData(username, data);
+    if (!props.backendUrl) {
+        props.backendUrl = 'localhost:8080';
+    }
+
+    const createRoom = (username: string) => {
+        fetch(`http://${props.backendUrl}/room/${username}`, {method: 'POST'}).then(response => response.json()).then(data => {
+            console.log(data);
+            props.setData(username, data);
         });
     };
 
     const joinRoom = (username: string, roomCode: string) => {
-        fetch(`http://localhost:8080/room/${username}/${roomCode}`, { method: 'POST'}).then(response => response.json())
+        fetch(`http://${props.backendUrl}/room/${username}/${roomCode}`, {method: 'POST'}).then(response => response.json())
             .then(data => {
                 console.log(data);
-                if(data.error){
+                if (data.error) {
                     setJoinError(data.error);
                 } else {
                     setJoinError('');
-                  // Join Game
-                  props.setData(username, data);
+                    // Join Game
+                    props.setData(username, data);
                 }
             });
     };
 
     return (
         <div className="center-form">
-        <RoomManager errorMsg={joinError} onCreate={createRoom} onJoin={joinRoom}/>
+            <RoomManager errorMsg={joinError} onCreate={createRoom} onJoin={joinRoom}/>
         </div>
     )
 };
