@@ -101,4 +101,11 @@ public class RoomService {
     }
     return emptyCards;
   }
+
+	public Room getRoomByCode(String roomcode) {
+		GameHandler gh = gameHandlers.stream()
+				.filter(gameHandler -> roomcode.toUpperCase().equals(gameHandler.getRoom().getRoomCode())).findFirst()
+				.orElse(null);
+		return gh != null ? gh.getRoom() : null;
+	}
 }

@@ -9,3 +9,15 @@ export type Room = {
     finalRound: boolean
     playerturn: number;
 }
+
+export const defaultRoom: Room = {
+    roomCode: '',
+    host: {
+        cards: [],
+        name: ''
+    },
+    players: [],
+    table: [],
+    finalRound: false,
+    playerturn: 0
+};
