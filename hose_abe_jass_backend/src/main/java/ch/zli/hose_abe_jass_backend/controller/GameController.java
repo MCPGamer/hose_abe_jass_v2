@@ -1,6 +1,9 @@
 package ch.zli.hose_abe_jass_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,20 +18,30 @@ import ch.zli.hose_abe_jass_backend.model.RoomService;
 public class GameController {
 	@Autowired
 	private RoomService roomService;
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 
 	// TODO: rest functions for this
 
 	@PostMapping("/room/{name}/{roomCode}")
 	public Object joinRoom(@PathVariable String name, @PathVariable String roomCode) {
 		try {
-			return roomService.joinRoom(name, roomCode);
+			Room room = roomService.joinRoom(name, roomCode);
+			broadcastNews(roomCode);
+			return room;
 		} catch (JoinRoomException ex) {
-			return "{ \"error\": \""+ ex.getErrorMessage() + "\"}";
+			return "{ \"error\": \"" + ex.getErrorMessage() + "\"}";
 		}
 	}
-	
+
 	@PostMapping("/room/{username}")
 	public Room createRoom(@PathVariable String username) {
 		return roomService.createRoom(username);
+	}
+
+	@MessageMapping("/room")
+	public void broadcastNews(@Payload String roomcode) {
+		System.out.println("Sending:" + roomcode);
+		this.simpMessagingTemplate.convertAndSend("/room", roomService.getRoomByCode(roomcode));
 	}
 }
