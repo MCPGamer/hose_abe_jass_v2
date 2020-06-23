@@ -31,4 +31,9 @@ public class GameController {
 	public Room createRoom(@PathVariable String username) {
 		return roomService.createRoom(username);
 	}
+
+	@PostMapping("/room/start/{roomCode}")
+	public Room startGame(@PathVariable String roomCode) {
+		return roomService.startGame(roomCode);
+	}
 }
