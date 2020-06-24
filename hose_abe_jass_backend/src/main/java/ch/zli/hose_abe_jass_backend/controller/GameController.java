@@ -38,19 +38,24 @@ public class GameController {
   public Room startGame(@PathVariable String roomCode) {
     return roomService.startGame(roomCode);
   }
-  
-  @GetMapping("/room/swapsingle/{roomCode}/{username}/{playerCard}/{tableCard}")
-  public void swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
-	  roomService.swapSingle(roomCode, username, Integer.parseInt(playerCard), Integer.parseInt(tableCard));
+
+  @GetMapping("/room/finish/{roomCode}")
+  public Room finishGame(@PathVariable String roomCode) {
+    return roomService.finishGame(roomCode);
   }
   
-  @GetMapping("/room/swapAll/{roomCode}/{username}")
-  public void swapAll(@PathVariable String roomCode, @PathVariable String username) {
-	  roomService.swapAll(roomCode, username);
+  @PostMapping("/room/swapSingle/{roomCode}/{username}/{playerCard}/{tableCard}")
+  public Room swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
+	  return roomService.swapSingle(roomCode, username, Integer.parseInt(playerCard), Integer.parseInt(tableCard));
   }
   
-  @GetMapping("/room/swapNone/{roomCode}/{username}")
-  public void swapNone(@PathVariable String roomCode, @PathVariable String username) {
-	  roomService.swapNone(roomCode, username);
+  @PostMapping("/room/swapAll/{roomCode}/{username}")
+  public Room swapAll(@PathVariable String roomCode, @PathVariable String username) {
+	  return roomService.swapAll(roomCode, username);
+  }
+  
+  @PostMapping("/room/swapNone/{roomCode}/{username}")
+  public Room swapNone(@PathVariable String roomCode, @PathVariable String username) {
+	  return roomService.swapNone(roomCode, username);
   }
 }

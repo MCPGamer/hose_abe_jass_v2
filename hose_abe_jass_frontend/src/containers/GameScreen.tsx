@@ -59,20 +59,32 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
           tableCardIndex = props.room.table.indexOf(card);
         }
 
-        fetch(`http://${props.backendUrl}/room/swapsingle/${props.room.roomCode}/${props.player}/${playerCardIndex}/${tableCardIndex}`)
-            .then(response => setSwapCard(defaultCard));
+        fetch(`http://${props.backendUrl}/room/swapSingle/${props.room.roomCode}/${props.player}/${playerCardIndex}/${tableCardIndex}`, {method:'POST'})
+            .then(response => response.json())
+            .then(data => {
+              setSwapCard(defaultCard);
+              props.handleSetRoom(data);
+            });
       }
     }
   };
 
   const swapAll = () => {
-    fetch(`http://${props.backendUrl}/room/swapAll/${props.room.roomCode}/${props.player}`)
-        .then(response => setSwapCard(defaultCard));
+    fetch(`http://${props.backendUrl}/room/swapAll/${props.room.roomCode}/${props.player}`, {method:'POST'})
+        .then(response => response.json())
+        .then(data => {
+          setSwapCard(defaultCard);
+          props.handleSetRoom(data);
+        });
   };
 
   const swapNone = () => {
-    fetch(`http://${props.backendUrl}/room/swapNone/${props.room.roomCode}/${props.player}`)
-        .then(response => setSwapCard(defaultCard));
+    fetch(`http://${props.backendUrl}/room/swapNone/${props.room.roomCode}/${props.player}`, {method:'POST'})
+        .then(response => response.json())
+        .then(data => {
+          setSwapCard(defaultCard);
+          props.handleSetRoom(data);
+        });
   };
 
   const startGame = () => {
