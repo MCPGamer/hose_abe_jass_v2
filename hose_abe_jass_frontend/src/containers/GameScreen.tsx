@@ -21,7 +21,7 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   const [swapCard, setSwapCard] = useState<Card>(defaultCard);
 
   useEffect(() => {
-    setEnabled(props.room.players[props.room.playerturn].name === props.player);
+    setEnabled(props.room.players[props.room.playerTurn].name === props.player);
     const player = props.room.players.find((p) => p.name === props.player);
     if (player !== undefined) {
       setPlayer(player);
@@ -65,6 +65,16 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
     }
   };
 
+  const swapAll = () => {
+    fetch(`http://${props.backendUrl}/room/swapAll/${props.room.roomCode}/${props.player}`)
+        .then(response => setSwapCard(defaultCard));
+  };
+
+  const swapNone = () => {
+    fetch(`http://${props.backendUrl}/room/swapNone/${props.room.roomCode}/${props.player}`)
+        .then(response => setSwapCard(defaultCard));
+  };
+
   const startGame = () => {
     fetch('http://' + props.backendUrl + '/room/start/' + props.room.roomCode, {method: 'POST'}).then(response => response.json())
         .then(room => props.handleSetRoom(room));
@@ -79,16 +89,19 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
                 <p>Hose Abe</p>
                 <CardHand cards={props.room.table} handleSwap={handleSwapFromTable} enabled={enabled}
                           selectedCard={swapCard}/>
-                <p>TODO: Add Button "Klopfen" and Button "Alle Drei Nehmen</p>
+                          <div className={'inline'}>
+                              <Button className={'center-element'} variant="outlined" onClick={swapAll} disabled={!enabled}>Alle 3 Nehmen</Button>
+                              <Button className={'center-element'} variant="outlined" onClick={swapNone} disabled={!enabled}>Klopfen</Button>
+                          </div>
               </div>
               <div className={'hand center-element'}>
                 <CardHand cards={player.cards} handleSwap={handleSwapFromHand} enabled={enabled}
                           selectedCard={swapCard}/>
               </div>
             </div>
-        ) : props.room.host.name !== props.player ? 'Waiting on Host to start the game' :
+        ) : props.room.host.name !== props.player ? 'Warten bis der Host das Spiel startet' :
             <div className={'center-text'}>
-              <p>Start the game as soon as everybody joined</p>
+              <p>Start das Spiel sobald alle dem Raum beigetreten sind</p>
               {props.room.players.filter(player => player !== null).length > 1 ?
                   <Button variant="outlined" className={'center-element'} onClick={startGame}>Start Game</Button> : ''}
             </div>
