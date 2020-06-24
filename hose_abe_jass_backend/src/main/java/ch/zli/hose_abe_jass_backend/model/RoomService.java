@@ -245,7 +245,7 @@ public class RoomService {
 
 	public Room finishGame(String roomCode) {
 		Room room = getRoomByCode(roomCode);
-		Map<Double, Player> playerScores = new HashMap<>();
+		Map<Player, Double> playerScores = new HashMap<>();
 
 		for (Player player : room.getPlayers()) {
 			if (player != null) {
@@ -253,9 +253,9 @@ public class RoomService {
 				if (playerCards[0].getCardValue() == playerCards[1].getCardValue()
 						&& playerCards[1] == playerCards[2]) {
 					if (playerCards[0].getCardValue().getValue() == 11) {
-						playerScores.put(33.00, player);
+						playerScores.put(player, 33.00);
 					} else {
-						playerScores.put(30.5, player);
+						playerScores.put(player, 30.5);
 					}
 				} else {
 					CardColor cardColor = null;
@@ -280,7 +280,7 @@ public class RoomService {
 								maxValue = cardNumber;
 							}
 						}
-						playerScores.put((double) maxValue, player);
+						playerScores.put(player, (double) maxValue);
 					} else {
 						int sum = 0;
 						for (Card playerCard : playerCards) {
@@ -288,18 +288,20 @@ public class RoomService {
 								sum += playerCard.getCardValue().getValue();
 							}
 						}
-						playerScores.put((double) sum, player);
+						playerScores.put(player, (double) sum);
 					}
 				}
 			}
 		}
-		List<Double> sortedKeys = new ArrayList<>(playerScores.keySet());
+		List<Double> sortedKeys = new ArrayList<>(playerScores.values());
 		Collections.sort(sortedKeys);
 		int index = 0;
-		for (int i = sortedKeys.size() - 1; i >= 0; i--) {
-			room.getPlayers()[index] = playerScores.get(sortedKeys.get(i));
+		
+		for(Player p : playerScores.keySet()) {
+			room.getPlayers()[index] = p;
 			index++;
 		}
+
 		broadcastNews(room.getRoomCode());
 		return room;
 	}
