@@ -19,7 +19,7 @@ export const CardComponent: React.FC<Props> = (props) => {
           props.card === null ? '' :
               (<img className={props.selected ? 'card selected' : 'card'}
                     src={`${process.env.PUBLIC_URL}/img/jasskarten/${props.card.cardColor}${props.card.cardValue}.gif`}
-                    alt={'Image of the Card'} onClick={handleSwap}/>)
+                    alt={'Karte'} onClick={handleSwap}/>)
         }
       </div>
   );

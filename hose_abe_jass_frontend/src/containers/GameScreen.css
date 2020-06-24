@@ -16,3 +16,12 @@
 .hand{
     padding-top: 100px;
 }
+
+.inline{
+    display: inline-flex;
+}
+
+.inline button{
+    margin-left: 10px;
+    margin-right: 10px;
+}

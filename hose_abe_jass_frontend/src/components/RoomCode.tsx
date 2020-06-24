@@ -8,7 +8,7 @@ type Props = {
 export const RoomCode: React.FC<Props> = (props) => {
     return (
         <div className={'roomcode-container'}>
-            <h2><p>Tell your Friends to<br/>Join using the code</p>
+            <h2><p>Gib den Folgenden Raumcode<br/> deinen Kollegen um beizutreten</p>
                 <p>{props.code}</p></h2>
         </div>
     );

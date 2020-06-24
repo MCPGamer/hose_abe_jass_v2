@@ -33,19 +33,19 @@ export const RoomManager: React.FC<Props> = (props) => {
             <fieldset>
                 <div>
                     <TextField variant="outlined" onChange={handleChange} name='username' value={username}
-                               label="Username" type="text" required/>
+                               label="Benutzername" type="text" required/>
                 </div>
                 <div className="join-field">
-                    <TextField variant="outlined" onChange={handleChange} name='roomCode' value={roomCode} label="Room"
+                    <TextField variant="outlined" onChange={handleChange} name='roomCode' value={roomCode} label="Raumcode"
                                type="text"/>
-                    <Button variant="outlined" onClick={handleOnJoin} disabled={!roomCode}>Join</Button>
+                    <Button variant="outlined" onClick={handleOnJoin} disabled={!roomCode}>Beitreten</Button>
                 </div>
                 {props.errorMsg !== '' ? (
                     <div className='join-error'>
                         <p>{props.errorMsg}</p>
                     </div>) : ''}
                 <div>
-                    <Button variant="outlined" onClick={handleOnCreate} disabled={!username}>Create</Button>
+                    <Button variant="outlined" onClick={handleOnCreate} disabled={!username}>Erstellen</Button>
                 </div>
             </fieldset>
         </form>
