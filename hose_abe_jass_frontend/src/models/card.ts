@@ -1,5 +1,9 @@
 export type Card =  {
     cardValue: string,
     cardColor: string;
-    finalTurnPlayed: boolean
 }
+
+export const defaultCard: Card = {
+    cardValue:'',
+    cardColor:''
+};
