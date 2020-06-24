@@ -15,6 +15,4 @@ public class GameHandler {
 	public void setRoom(Room room) {
 		this.room = room;
 	}
-	
-	//TODO: All Methods for Playing the Game go here
 }

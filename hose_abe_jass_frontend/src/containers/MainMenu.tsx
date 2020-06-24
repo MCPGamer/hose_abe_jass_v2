@@ -17,7 +17,6 @@ export const MainMenuContainer: React.FC<Props> = (props) => {
 
     const createRoom = (username: string) => {
         fetch(`http://${props.backendUrl}/room/${username}`, {method: 'POST'}).then(response => response.json()).then(data => {
-            console.log(data);
             props.setData(username, data);
         });
     };
@@ -25,7 +24,6 @@ export const MainMenuContainer: React.FC<Props> = (props) => {
     const joinRoom = (username: string, roomCode: string) => {
         fetch(`http://${props.backendUrl}/room/${username}/${roomCode}`, {method: 'POST'}).then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.error) {
                     setJoinError(data.error);
                 } else {
