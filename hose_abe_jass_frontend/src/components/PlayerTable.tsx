@@ -17,10 +17,10 @@ export const PlayerTable: React.FC<Props> = (props) => {
                     p !== null ?
                         <tr key={p.name}>
                             <td className={props.room.players[props.room.playerTurn].name === p.name ? 'bold' : ''}>
-                                {p.name === props.player ? p.name + ' (du)' : p.name}
+                                {p.name === props.player ? p.name + ' (du)' : p.name}{p.finalTurnPlayed ? ' Klopft' : ''}
                                 {props.revealCards ? p.cards.map((c) => (
                                     <img className={'small-card'} alt={'Karte'}
-                                           src={`${process.env.PUBLIC_URL}/img/jasskarten/${c.cardColor}${c.cardValue}Klein.gif'}`}/>
+                                           src={`${process.env.PUBLIC_URL}/img/jasskarten/${c.cardColor}${c.cardValue}Klein.gif`}/>
                                 )) : ''}
                             </td>
                         </tr>

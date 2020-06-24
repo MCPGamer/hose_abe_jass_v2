@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './GameScreen.css';
-import {Room} from '../models/room';
+import {defaultRoom, Room} from '../models/room';
 import {RoomCode} from '../components/RoomCode';
 import {PlayerTable} from '../components/PlayerTable';
 import {CardHand} from '../components/CardHand';
@@ -25,6 +25,10 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
     const player = props.room.players.find((p) => p.name === props.player);
     if (player !== undefined) {
       setPlayer(player);
+    }
+
+    if(props.room.gameOver){
+
     }
   }, [props.room, props.player]);
 
@@ -92,10 +96,19 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
         .then(room => props.handleSetRoom(room));
   };
 
+  const backToMainMenu = () => {
+    props.handleSetRoom(defaultRoom);
+  };
+
   return (
       <div className="center-form">
-        <PlayerTable room={props.room} player={props.player}/>
-        {props.room.table.filter((c) => c !== null).length !== 0 ? (
+        <PlayerTable room={props.room} player={props.player} revealCards={props.room.gameOver}/>
+        {props.room.gameOver ? (
+            <div className={'center-text'}>
+              <p>Die Runde ist beendet</p>
+              <Button variant={'outlined'} onClick={backToMainMenu}>Zurück zum Hauptmenü</Button>
+            </div>
+        ) : props.room.table.filter((c) => c !== null).length !== 0 ? (
             <div className={'center-text'}>
               <div className={'table'}>
                 <p>Hose Abe</p>
