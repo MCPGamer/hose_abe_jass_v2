@@ -18,8 +18,6 @@ public class GameController {
   @Autowired
   private RoomService roomService;
 
-  // TODO: rest functions for this
-
   @PostMapping("/room/{name}/{roomCode}")
   public Object joinRoom(@PathVariable String name, @PathVariable String roomCode) {
     try {

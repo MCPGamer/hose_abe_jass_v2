@@ -27,11 +27,9 @@ public class RoomService {
 
 	@MessageMapping("/roomUpdate")
 	public void broadcastNews(@Payload String roomcode) {
-		System.out.println("Sending:" + roomcode);
 		this.simpMessagingTemplate.convertAndSend("/roomUpdate", getRoomByCode(roomcode));
 	}
 
-	// TODO: All Methods for Creating / Joining rooms go here
 	public Room createRoom(String username) {
 		boolean roomAlreadyExists;
 		String generatedString;
