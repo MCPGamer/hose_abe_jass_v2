@@ -84,7 +84,7 @@ public class RoomService {
 		}
 		
 		if(room.getTable()[0] != null) {
-			throw new JoinRoomException("Room Already startet");
+			throw new JoinRoomException("Room Already started");
 		}
 
 		broadcastNews(roomCode);
@@ -154,5 +154,39 @@ public class RoomService {
 				.filter(gameHandler -> roomcode.toUpperCase().equals(gameHandler.getRoom().getRoomCode())).findFirst()
 				.orElse(null);
 		return gh != null ? gh.getRoom() : null;
+	}
+
+	public Room swapSingle(String roomCode, String username, int playerCard, int tableCard) {
+		Room room = getRoomByCode(roomCode);
+		Player player = null;
+		
+		for(Player p : room.getPlayers()) {
+			if(p != null && p.getName().equals(username)) {
+				player = p;
+			}
+		}
+		
+		Card temp = player.getCards()[playerCard];
+		player.getCards()[playerCard] = room.getTable()[tableCard];
+		room.getTable()[tableCard] = temp;
+
+		setNextPersonsTurn(room);
+		
+		broadcastNews(roomCode);
+		return null;
+	}
+	
+	private void setNextPersonsTurn(Room room) {
+		int countPlayers = 0;
+		for(Player p : room.getPlayers()) {
+			if(p != null) {
+				countPlayers++;
+			}
+		}
+		
+		room.setPlayerturn(room.getPlayerturn() + 1);
+		if(room.getPlayerturn() == countPlayers) {
+			room.setPlayerturn(0);
+		}
 	}
 }

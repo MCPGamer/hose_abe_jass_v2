@@ -1,3 +1,7 @@
 .card{
   width:100%;
 }
+
+.selected{
+  border: lightgreen 5px solid;
+}

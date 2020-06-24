@@ -7,6 +7,7 @@ type Props = {
     cards: Card[];
     handleSwap: (card:Card) => void;
     enabled:boolean;
+    selectedCard?:Card;
 }
 
 export const CardHand: React.FC<Props> = (props) => {
@@ -16,14 +17,13 @@ export const CardHand: React.FC<Props> = (props) => {
         if(props.enabled){
             props.handleSwap(card);
         }
-
     };
 
     return (
         <div className={'inline'}>
           {props.cards.map((c) => {
               index = index + 1;
-              return <CardComponent key={index} card={c} handleSwap={handleSwap}/>
+              return <CardComponent key={index} card={c} handleSwap={handleSwap} selected={c === props.selectedCard}/>
           })}
         </div>
     );

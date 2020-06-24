@@ -2,6 +2,7 @@ package ch.zli.hose_abe_jass_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,5 +37,10 @@ public class GameController {
   @PostMapping("/room/start/{roomCode}")
   public Room startGame(@PathVariable String roomCode) {
     return roomService.startGame(roomCode);
+  }
+  
+  @GetMapping("/room/swapsingle/{roomCode}/{username}/{playerCard}/{tableCard}")
+  public void swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
+	  roomService.swapSingle(roomCode, username, Integer.parseInt(playerCard), Integer.parseInt(tableCard));
   }
 }

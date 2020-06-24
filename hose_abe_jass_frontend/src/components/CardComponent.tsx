@@ -5,6 +5,7 @@ import {Card} from '../models/card';
 type Props = {
   card: Card;
   handleSwap: (card: Card) => void;
+  selected: boolean;
 }
 
 export const CardComponent: React.FC<Props> = (props) => {
@@ -16,7 +17,7 @@ export const CardComponent: React.FC<Props> = (props) => {
       <div>
         {
           props.card === null ? '' :
-              (<img className={'card'}
+              (<img className={props.selected ? 'card selected' : 'card'}
                     src={`${process.env.PUBLIC_URL}/img/jasskarten/${props.card.cardColor}${props.card.cardValue}.gif`}
                     alt={'Image of the Card'} onClick={handleSwap}/>)
         }

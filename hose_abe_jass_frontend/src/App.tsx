@@ -30,7 +30,7 @@ function App() {
 
     const handleMessage = (stompMessage: Message) => {
         const updatedRoom: Room = JSON.parse(stompMessage.body);
-        console.log('Stomp Message Recieved:')
+        console.log('Stomp Message Recieved:');
         console.log(stompMessage);
         console.log('Room update:');
         console.log(updatedRoom);
@@ -38,7 +38,7 @@ function App() {
         if (room.roomCode === updatedRoom.roomCode) {
             setRoom(updatedRoom);
         }
-    }
+    };
 
     return (
         <ThemeProvider theme={theme}>
