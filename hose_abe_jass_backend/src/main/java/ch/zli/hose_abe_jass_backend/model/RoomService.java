@@ -170,8 +170,54 @@ public class RoomService {
 		player.getCards()[playerCard] = room.getTable()[tableCard];
 		room.getTable()[tableCard] = temp;
 
+		if(room.isFinalRound()) {
+			player.setFinalTurnPlayed(true);
+		}
+		
 		setNextPersonsTurn(room);
 		
+		broadcastNews(roomCode);
+		return null;
+	}
+	
+	public Room swapAll(String roomCode, String username) {
+		Room room = getRoomByCode(roomCode);
+		Player player = null;
+		
+		for(Player p : room.getPlayers()) {
+			if(p != null && p.getName().equals(username)) {
+				player = p;
+			}
+		}
+		
+		Card[] temp = player.getCards();
+		player.setCards(room.getTable());
+		room.setTable(temp);;
+
+		if(room.isFinalRound()) {
+			player.setFinalTurnPlayed(true);
+		}
+		
+		setNextPersonsTurn(room);
+		
+		broadcastNews(roomCode);
+		return null;
+	}
+	
+	public Room swapNone(String roomCode, String username) {
+		Room room = getRoomByCode(roomCode);
+		Player player = null;
+		
+		for(Player p : room.getPlayers()) {
+			if(p != null && p.getName().equals(username)) {
+				player = p;
+			}
+		}
+		
+		player.setFinalTurnPlayed(true);
+		room.setFinalRound(true);
+		
+		setNextPersonsTurn(room);
 		broadcastNews(roomCode);
 		return null;
 	}
@@ -184,9 +230,13 @@ public class RoomService {
 			}
 		}
 		
-		room.setPlayerturn(room.getPlayerturn() + 1);
-		if(room.getPlayerturn() == countPlayers) {
-			room.setPlayerturn(0);
+		room.setPlayerTurn(room.getPlayerTurn() + 1);
+		if(room.getPlayerTurn() == countPlayers) {
+			room.setPlayerTurn(0);
+		}
+		
+		if(room.getPlayers()[room.getPlayerTurn()].isFinalTurnPlayed()) {
+			room.setGameOver(true);
 		}
 	}
 }

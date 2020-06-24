@@ -21,7 +21,7 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   const [swapCard, setSwapCard] = useState<Card>(defaultCard);
 
   useEffect(() => {
-    setEnabled(props.room.players[props.room.playerturn].name === props.player);
+    setEnabled(props.room.players[props.room.playerTurn].name === props.player);
     const player = props.room.players.find((p) => p.name === props.player);
     if (player !== undefined) {
       setPlayer(player);
@@ -66,11 +66,13 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   };
 
   const swapAll = () => {
-
+    fetch(`http://${props.backendUrl}/room/swapAll/${props.room.roomCode}/${props.player}`)
+        .then(response => setSwapCard(defaultCard));
   };
 
   const swapNone = () => {
-
+    fetch(`http://${props.backendUrl}/room/swapNone/${props.room.roomCode}/${props.player}`)
+        .then(response => setSwapCard(defaultCard));
   };
 
   const startGame = () => {
@@ -88,8 +90,8 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
                 <CardHand cards={props.room.table} handleSwap={handleSwapFromTable} enabled={enabled}
                           selectedCard={swapCard}/>
                           <div className={'inline'}>
-                              <Button className={'center-element'} variant="outlined" onClick={swapAll}>Alle 3 Nehmen</Button>
-                              <Button className={'center-element'} variant="outlined" onClick={swapNone}>Klopfen</Button>
+                              <Button className={'center-element'} variant="outlined" onClick={swapAll} disabled={!enabled}>Alle 3 Nehmen</Button>
+                              <Button className={'center-element'} variant="outlined" onClick={swapNone} disabled={!enabled}>Klopfen</Button>
                           </div>
               </div>
               <div className={'hand center-element'}>

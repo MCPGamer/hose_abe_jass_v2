@@ -43,4 +43,14 @@ public class GameController {
   public void swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
 	  roomService.swapSingle(roomCode, username, Integer.parseInt(playerCard), Integer.parseInt(tableCard));
   }
+  
+  @GetMapping("/room/swapAll/{roomCode}/{username}")
+  public void swapAll(@PathVariable String roomCode, @PathVariable String username) {
+	  roomService.swapAll(roomCode, username);
+  }
+  
+  @GetMapping("/room/swapNone/{roomCode}/{username}")
+  public void swapNone(@PathVariable String roomCode, @PathVariable String username) {
+	  roomService.swapNone(roomCode, username);
+  }
 }

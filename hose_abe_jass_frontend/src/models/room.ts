@@ -3,11 +3,12 @@ import {Card} from './card';
 
 export type Room = {
     roomCode: string,
-    host: Player;
-    players: Player[];
-    table: Card[];
-    finalRound: boolean
-    playerturn: number;
+    host: Player,
+    players: Player[],
+    table: Card[],
+    finalRound: boolean,
+    playerTurn: number,
+    gameOver: boolean;
 }
 
 export const defaultRoom: Room = {
@@ -20,5 +21,6 @@ export const defaultRoom: Room = {
     players: [],
     table: [],
     finalRound: false,
-    playerturn: 0
+    playerTurn: 0,
+    gameOver: false
 };

@@ -6,7 +6,8 @@ public class Room {
 	private Player[] players = new Player[11];
 	private Card[] table = new Card[3];
 	private boolean finalRound = false;
-	private int playerturn = 0;
+	private boolean gameOver = false;
+	private int playerTurn = 0;
 	
 	public Room(String roomCode, Player host) {
 		this.roomCode = roomCode;
@@ -54,11 +55,19 @@ public class Room {
 		this.finalRound = finalRound;
 	}
 
-	public int getPlayerturn() {
-		return playerturn;
+	public boolean isGameOver() {
+		return gameOver;
 	}
 
-	public void setPlayerturn(int playerturn) {
-		this.playerturn = playerturn;
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+	
+	public int getPlayerTurn() {
+		return playerTurn;
+	}
+
+	public void setPlayerTurn(int playerturn) {
+		this.playerTurn = playerturn;
 	}
 }
