@@ -14,7 +14,8 @@ export const defaultRoom: Room = {
     roomCode: '',
     host: {
         cards: [],
-        name: ''
+        name: '',
+        finalTurnPlayed: false
     },
     players: [],
     table: [],
