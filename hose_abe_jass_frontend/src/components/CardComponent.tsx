@@ -17,7 +17,7 @@ export const CardComponent: React.FC<Props> = (props) => {
         {
           props.card === null ? '' :
               (<img className={'card'}
-                    src={`%PUBLIC_URL%/img/jasskarten/${props.card.cardColor}${props.card.cardValue}.gif`}
+                    src={`${process.env.PUBLIC_URL}/img/jasskarten/${props.card.cardColor}${props.card.cardValue}.gif`}
                     alt={'Image of the Card'} onClick={handleSwap}/>)
         }
       </div>

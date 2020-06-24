@@ -4,3 +4,11 @@
     align-items: center;
     height: 100vh;
 }
+
+.center-element {
+    margin: 0 auto;
+}
+
+.center-text {
+    text-align: center;
+}

@@ -82,6 +82,10 @@ public class RoomService {
 		if (!playerAdded) {
 			throw new JoinRoomException("Room is already full");
 		}
+		
+		if(room.getTable()[0] != null) {
+			throw new JoinRoomException("Room Already startet");
+		}
 
 		broadcastNews(roomCode);
 		return room;
