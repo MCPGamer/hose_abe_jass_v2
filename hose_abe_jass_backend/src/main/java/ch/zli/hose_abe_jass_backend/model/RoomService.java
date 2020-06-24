@@ -20,15 +20,16 @@ import ch.zli.hose_abe_jass_backend.exception.JoinRoomException;
 @Service
 @ApplicationScope
 public class RoomService {
-	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
-	private ArrayList<GameHandler> gameHandlers = new ArrayList<>();
 
-	@MessageMapping("/roomUpdate")
-	public void broadcastNews(@Payload String roomcode) {
-		System.out.println("Sending:" + roomcode);
-		this.simpMessagingTemplate.convertAndSend("/roomUpdate", getRoomByCode(roomcode));
-	}
+  @Autowired
+  private SimpMessagingTemplate simpMessagingTemplate;
+  private ArrayList<GameHandler> gameHandlers = new ArrayList<>();
+
+  @MessageMapping("/roomUpdate")
+  public void broadcastNews(@Payload String roomcode) {
+    System.out.println("Sending:" + roomcode);
+    this.simpMessagingTemplate.convertAndSend("/roomUpdate", getRoomByCode(roomcode));
+  }
 
   // TODO: All Methods for Creating / Joining rooms go here
   public Room createRoom(String username) {
@@ -49,66 +50,66 @@ public class RoomService {
     gameHandlers.add(gameHandler);
     return gameRoom;
   }
-  
+
   public Room startGame(String roomCode) {
-		Room room = getRoomByCode(roomCode);
-		Card[] cards = generateCards();
-		shuffle(cards);
-		room.setTable(getFirst3Cards(cards));
-		for (Player player : room.getPlayers()) {
-			if (player != null) {
-				player.setCards(getFirst3Cards(cards));
-			}
-		}
-		broadcastNews(roomCode);
-		return room;
-	}
+    Room room = getRoomByCode(roomCode);
+    Card[] cards = generateCards();
+    shuffle(cards);
+    room.setTable(getFirst3Cards(cards));
+    for (Player player : room.getPlayers()) {
+      if (player != null) {
+        player.setCards(getFirst3Cards(cards));
+      }
+    }
+    broadcastNews(roomCode);
+    return room;
+  }
 
-	private Card[] generateCards() {
-		Card[] cards = new Card[36];
-		int currentCard = 0;
-		for (CardColor color : CardColor.values()) {
-			for (CardValue value : CardValue.values()) {
-				cards[currentCard] = new Card(value, color);
-				currentCard++;
-			}
-		}
-		return cards;
-	}
+  private Card[] generateCards() {
+    Card[] cards = new Card[36];
+    int currentCard = 0;
+    for (CardColor color : CardColor.values()) {
+      for (CardValue value : CardValue.values()) {
+        cards[currentCard] = new Card(value, color);
+        currentCard++;
+      }
+    }
+    return cards;
+  }
 
-	private void shuffle(Card[] cards) {
-		Random rand = new Random();
+  private void shuffle(Card[] cards) {
+    Random rand = new Random();
 
-		for (int i = 0; i < cards.length; i++) {
-			int randomIndexToSwap = rand.nextInt(cards.length);
-			Card temp = cards[randomIndexToSwap];
-			cards[randomIndexToSwap] = cards[i];
-			cards[i] = temp;
-		}
-	}
+    for (int i = 0; i < cards.length; i++) {
+      int randomIndexToSwap = rand.nextInt(cards.length);
+      Card temp = cards[randomIndexToSwap];
+      cards[randomIndexToSwap] = cards[i];
+      cards[i] = temp;
+    }
+  }
 
-	private Card[] getFirst3Cards(Card[] cardSet) {
-		// Find first Card in array that is not null
-		int topCard = 0;
-		for(int i = 0; i < cardSet.length; i++) {
-			if(cardSet[i] != null) {
-				topCard = i;
-				break;
-			}
-		}
-		
-		// Give player the first 3 Cards
-		Card[] handoutCards = new Card[] {cardSet[topCard], cardSet[topCard + 1], cardSet[topCard + 2]};
-		
-		// Remove them from the Deck
-		cardSet[topCard] = null;
-		cardSet[topCard + 1] = null;
-		cardSet[topCard + 2] = null;
-		
-		return handoutCards;
-	}
-  
-private String generateCode() {
+  private Card[] getFirst3Cards(Card[] cardSet) {
+    // Find first Card in array that is not null
+    int topCard = 0;
+    for (int i = 0; i < cardSet.length; i++) {
+      if (cardSet[i] != null) {
+        topCard = i;
+        break;
+      }
+    }
+
+    // Give player the first 3 Cards
+    Card[] handoutCards = new Card[]{cardSet[topCard], cardSet[topCard + 1], cardSet[topCard + 2]};
+
+    // Remove them from the Deck
+    cardSet[topCard] = null;
+    cardSet[topCard + 1] = null;
+    cardSet[topCard + 2] = null;
+
+    return handoutCards;
+  }
+
+  private String generateCode() {
     int leftLimit = 97;
     int rightLimit = 122;
     int targetStringLength = 4;
@@ -132,27 +133,27 @@ private String generateCode() {
       }
     }
 
-		Player[] players = room.getPlayers();
-		for (int i = 0; i < 11; i++) {
-			if (players[i] == null) {
-				players[i] = new Player(name);
-				playerAdded = true;
-				break;
-			} else {
-				boolean hasDuplicatedName = Arrays.stream(players)
-						.anyMatch(player -> player != null && player.getName().equals(name));
-				if (hasDuplicatedName) {
-					throw new JoinRoomException("A Player in that Room already has that Name");
-				}
-			}
-		}
+    Player[] players = room.getPlayers();
+    for (int i = 0; i < 11; i++) {
+      if (players[i] == null) {
+        players[i] = new Player(name);
+        playerAdded = true;
+        break;
+      } else {
+        boolean hasDuplicatedName = Arrays.stream(players)
+            .anyMatch(player -> player != null && player.getName().equals(name));
+        if (hasDuplicatedName) {
+          throw new JoinRoomException("A Player in that Room already has that Name");
+        }
+      }
+    }
     if (nameDuplicate) {
       throw new JoinRoomException("A Player in that Room already has that Name");
     }
-		
-		if(room.getTable()[0] != null) {
-			throw new JoinRoomException("Room Already started");
-		}
+
+    if (room.getTable()[0] != null) {
+      throw new JoinRoomException("Room Already started");
+    }
 
     if (!playerAdded) {
       throw new JoinRoomException("Room is already full");
@@ -167,45 +168,47 @@ private String generateCode() {
     Map<Double, Player> playerScores = new HashMap<>();
 
     for (Player player : room.getPlayers()) {
-      Card[] playerCards = player.getCards();
-      if (playerCards[0].getCardValue() == playerCards[1].getCardValue() && playerCards[1] == playerCards[2]) {
-        if (playerCards[0].getCardValue().getValue() == 11) {
-          playerScores.put(33.00, player);
+      if (player != null) {
+        Card[] playerCards = player.getCards();
+        if (playerCards[0].getCardValue() == playerCards[1].getCardValue() && playerCards[1] == playerCards[2]) {
+          if (playerCards[0].getCardValue().getValue() == 11) {
+            playerScores.put(33.00, player);
+          } else {
+            playerScores.put(30.5, player);
+          }
         } else {
-          playerScores.put(30.5, player);
-        }
-      } else {
-        CardColor cardColor = null;
-        int max = 0;
-        for (CardColor value : CardColor.values()) {
-          int count = 0;
-          for (Card playerCard : playerCards) {
-            if (playerCard.getCardColor().name().equals(value.name())) {
-              count++;
+          CardColor cardColor = null;
+          int max = 0;
+          for (CardColor value : CardColor.values()) {
+            int count = 0;
+            for (Card playerCard : playerCards) {
+              if (playerCard.getCardColor().name().equals(value.name())) {
+                count++;
+              }
+            }
+            if (count > max) {
+              max = count;
+              cardColor = value;
             }
           }
-          if (count > max) {
-            max = count;
-            cardColor = value;
-          }
-        }
-        if (max == 1) {
-          int maxValue = 0;
-          for (Card playerCard : playerCards) {
-            int cardNumber = playerCard.getCardValue().getValue();
-            if (cardNumber > maxValue) {
-              maxValue = cardNumber;
+          if (max == 1) {
+            int maxValue = 0;
+            for (Card playerCard : playerCards) {
+              int cardNumber = playerCard.getCardValue().getValue();
+              if (cardNumber > maxValue) {
+                maxValue = cardNumber;
+              }
             }
-          }
-          playerScores.put((double) maxValue, player);
-        } else {
-          int sum = 0;
-          for (Card playerCard : playerCards) {
-            if (playerCard.getCardColor().name().equals(cardColor.name())) {
-              sum += playerCard.getCardValue().getValue();
+            playerScores.put((double) maxValue, player);
+          } else {
+            int sum = 0;
+            for (Card playerCard : playerCards) {
+              if (playerCard.getCardColor().name().equals(cardColor.name())) {
+                sum += playerCard.getCardValue().getValue();
+              }
             }
+            playerScores.put((double) sum, player);
           }
-          playerScores.put((double) sum, player);
         }
       }
     }
@@ -216,7 +219,7 @@ private String generateCode() {
       room.getPlayers()[index] = playerScores.get(sortedKeys.get(i));
       index++;
     }
-    // TODO: add broadcastNews
+    broadcastNews(room.getRoomCode());
     return room;
   }
 
@@ -228,37 +231,37 @@ private String generateCode() {
     return gh != null ? gh.getRoom() : null;
   }
 
-	public Room swapSingle(String roomCode, String username, int playerCard, int tableCard) {
-		Room room = getRoomByCode(roomCode);
-		Player player = null;
-		
-		for(Player p : room.getPlayers()) {
-			if(p != null && p.getName().equals(username)) {
-				player = p;
-			}
-		}
-		
-		Card temp = player.getCards()[playerCard];
-		player.getCards()[playerCard] = room.getTable()[tableCard];
-		room.getTable()[tableCard] = temp;
+  public Room swapSingle(String roomCode, String username, int playerCard, int tableCard) {
+    Room room = getRoomByCode(roomCode);
+    Player player = null;
 
-		setNextPersonsTurn(room);
-		
-		broadcastNews(roomCode);
-		return null;
-	}
-	
-	private void setNextPersonsTurn(Room room) {
-		int countPlayers = 0;
-		for(Player p : room.getPlayers()) {
-			if(p != null) {
-				countPlayers++;
-			}
-		}
-		
-		room.setPlayerturn(room.getPlayerturn() + 1);
-		if(room.getPlayerturn() == countPlayers) {
-			room.setPlayerturn(0);
-		}
-	}
+    for (Player p : room.getPlayers()) {
+      if (p != null && p.getName().equals(username)) {
+        player = p;
+      }
+    }
+
+    Card temp = player.getCards()[playerCard];
+    player.getCards()[playerCard] = room.getTable()[tableCard];
+    room.getTable()[tableCard] = temp;
+
+    setNextPersonsTurn(room);
+
+    broadcastNews(roomCode);
+    return null;
+  }
+
+  private void setNextPersonsTurn(Room room) {
+    int countPlayers = 0;
+    for (Player p : room.getPlayers()) {
+      if (p != null) {
+        countPlayers++;
+      }
+    }
+
+    room.setPlayerturn(room.getPlayerturn() + 1);
+    if (room.getPlayerturn() == countPlayers) {
+      room.setPlayerturn(0);
+    }
+  }
 }

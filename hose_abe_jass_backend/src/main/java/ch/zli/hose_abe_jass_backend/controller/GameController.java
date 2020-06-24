@@ -41,6 +41,11 @@ public class GameController {
   public Room startGame(@PathVariable String roomCode) {
     return roomService.startGame(roomCode);
   }
+
+  @GetMapping("/room/finish/{roomCode}")
+  public Room finishGame(@PathVariable String roomCode) {
+    return roomService.finishGame(roomCode);
+  }
   
   @GetMapping("/room/swapsingle/{roomCode}/{username}/{playerCard}/{tableCard}")
   public void swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
