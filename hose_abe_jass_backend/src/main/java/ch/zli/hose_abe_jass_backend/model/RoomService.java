@@ -25,7 +25,7 @@ public class RoomService {
 		System.out.println("Sending:" + roomcode);
 		this.simpMessagingTemplate.convertAndSend("/roomUpdate", getRoomByCode(roomcode));
 	}
-	
+
 	// TODO: All Methods for Creating / Joining rooms go here
 	public Room createRoom(String username) {
 		boolean roomAlreadyExists;
@@ -97,27 +97,52 @@ public class RoomService {
 				player.setCards(getFirst3Cards(cards));
 			}
 		}
+		broadcastNews(roomCode);
 		return room;
 	}
 
 	private Card[] generateCards() {
 		Card[] cards = new Card[36];
 		int currentCard = 0;
-		for(CardColor color : CardColor.values()) {
-			for(CardValue value : CardValue.values()) {
+		for (CardColor color : CardColor.values()) {
+			for (CardValue value : CardValue.values()) {
 				cards[currentCard] = new Card(value, color);
 				currentCard++;
 			}
 		}
 		return cards;
 	}
-	
+
 	private void shuffle(Card[] cards) {
-		// TODO: Shuffel cards
+		Random rand = new Random();
+
+		for (int i = 0; i < cards.length; i++) {
+			int randomIndexToSwap = rand.nextInt(cards.length);
+			Card temp = cards[randomIndexToSwap];
+			cards[randomIndexToSwap] = cards[i];
+			cards[i] = temp;
+		}
 	}
-	
+
 	private Card[] getFirst3Cards(Card[] cardSet) {
-		return new Card[3];
+		// Find first Card in array that is not null
+		int topCard = 0;
+		for(int i = 0; i < cardSet.length; i++) {
+			if(cardSet[i] != null) {
+				topCard = i;
+				break;
+			}
+		}
+		
+		// Give player the first 3 Cards
+		Card[] handoutCards = new Card[] {cardSet[topCard], cardSet[topCard + 1], cardSet[topCard + 2]};
+		
+		// Remove them from the Deck
+		cardSet[topCard] = null;
+		cardSet[topCard + 1] = null;
+		cardSet[topCard + 2] = null;
+		
+		return handoutCards;
 	}
 
 	public Room getRoomByCode(String roomcode) {
