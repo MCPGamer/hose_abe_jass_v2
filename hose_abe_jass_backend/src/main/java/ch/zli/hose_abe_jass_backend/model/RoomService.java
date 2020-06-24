@@ -125,12 +125,14 @@ public class RoomService {
   public Room joinRoom(String name, String roomCode) throws JoinRoomException {
     Room room = null;
     boolean playerAdded = false;
-    boolean nameDuplicate = false;
 
-    for (GameHandler handler : gameHandlers) {
-      if (roomCode.toUpperCase().equals(handler.getRoom().getRoomCode())) {
-        room = handler.getRoom();
-      }
+    room = getRoomByCode(roomCode);
+    if(room == null){
+      throw new JoinRoomException("Mit diesem Code existiert kein Raum.");
+    }
+
+    if (room.getTable()[0] != null) {
+      throw new JoinRoomException("Dieses Spiel wurde bereits gestartet.");
     }
 
     Player[] players = room.getPlayers();
@@ -143,20 +145,13 @@ public class RoomService {
         boolean hasDuplicatedName = Arrays.stream(players)
             .anyMatch(player -> player != null && player.getName().equals(name));
         if (hasDuplicatedName) {
-          throw new JoinRoomException("A Player in that Room already has that Name");
+          throw new JoinRoomException("Dieser Benutzername ist bereits vergeben.");
         }
       }
     }
-    if (nameDuplicate) {
-      throw new JoinRoomException("A Player in that Room already has that Name");
-    }
-
-    if (room.getTable()[0] != null) {
-      throw new JoinRoomException("Room Already started");
-    }
 
     if (!playerAdded) {
-      throw new JoinRoomException("Room is already full");
+      throw new JoinRoomException("Raum ist voll.");
     }
 
     broadcastNews(roomCode);
