@@ -24,6 +24,10 @@ function App() {
         setRoom(room);
     };
 
+    const handleSetRoom = ( room: Room) => {
+        setRoom(room);
+    };
+
     const handleMessage = (stompMessage: Message) => {
         const updatedRoom: Room = JSON.parse(stompMessage.body);
         console.log('Stomp Message Recieved:')
@@ -44,7 +48,7 @@ function App() {
                     {room === defaultRoom ?
                         (<MainMenuContainer setData={setData} backendUrl={backendUrl}/>)
                         :
-                        (<GameScreenContainer room={room} player={username} backendUrl={backendUrl}/>)}
+                        (<GameScreenContainer room={room} player={username} backendUrl={backendUrl} handleSetRoom={handleSetRoom}/>)}
                 </div>
             </StompClient>
         </ThemeProvider>
