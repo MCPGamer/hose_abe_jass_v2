@@ -253,7 +253,7 @@ public class RoomService {
 			if (player != null) {
 				Card[] playerCards = player.getCards();
 				if (playerCards[0].getCardValue() == playerCards[1].getCardValue()
-						&& playerCards[1] == playerCards[2]) {
+						&& playerCards[1].getCardValue() == playerCards[2].getCardValue()) {
 					if (playerCards[0].getCardValue().getValue() == 11) {
 						playerScores.put(player, 33.00);
 					} else {
