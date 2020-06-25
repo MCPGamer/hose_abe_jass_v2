@@ -93,7 +93,7 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   };
 
   const backToMainMenu = () => {
-    fetch(`http://${props.backendUrl}/room/close/${props.room.roomCode}`);
+    fetch(`http://${props.backendUrl}/room/close/${props.room.roomCode}`).then();
     props.handleSetRoom(defaultRoom);
   };
 
