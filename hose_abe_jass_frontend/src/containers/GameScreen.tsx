@@ -26,10 +26,6 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
     if (player !== undefined) {
       setPlayer(player);
     }
-
-    if(props.room.gameOver){
-
-    }
   }, [props.room, props.player]);
 
   if (!props.backendUrl) {
@@ -97,6 +93,7 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   };
 
   const backToMainMenu = () => {
+    fetch(`http://${props.backendUrl}/room/close/${props.room.roomCode}`);
     props.handleSetRoom(defaultRoom);
   };
 

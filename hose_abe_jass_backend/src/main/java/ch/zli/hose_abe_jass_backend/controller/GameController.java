@@ -37,11 +37,6 @@ public class GameController {
     return roomService.startGame(roomCode);
   }
 
-  @GetMapping("/room/finish/{roomCode}")
-  public Room finishGame(@PathVariable String roomCode) {
-    return roomService.finishGame(roomCode);
-  }
-  
   @PostMapping("/room/swapSingle/{roomCode}/{username}/{playerCard}/{tableCard}")
   public Room swapSingle(@PathVariable String roomCode, @PathVariable String username, @PathVariable String playerCard, @PathVariable String tableCard) {
 	  return roomService.swapSingle(roomCode, username, Integer.parseInt(playerCard), Integer.parseInt(tableCard));
@@ -55,5 +50,10 @@ public class GameController {
   @PostMapping("/room/swapNone/{roomCode}/{username}")
   public Room swapNone(@PathVariable String roomCode, @PathVariable String username) {
 	  return roomService.swapNone(roomCode, username);
+  }
+  
+  @GetMapping("/room/close/{roomCode}")
+  public void closeRoom(@PathVariable String roomCode) {
+	  roomService.deleteRoom(roomCode);
   }
 }

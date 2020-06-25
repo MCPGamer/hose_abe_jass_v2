@@ -3,9 +3,12 @@ package ch.zli.hose_abe_jass_backend.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,6 +205,7 @@ public class RoomService {
 
 		if (room.getPlayers()[room.getPlayerTurn()].isFinalTurnPlayed()) {
 			room.setGameOver(true);
+			finishGame(room.getRoomCode());
 		}
 	}
 
@@ -241,7 +245,7 @@ public class RoomService {
 		return room;
 	}
 
-	public Room finishGame(String roomCode) {
+	public void finishGame(String roomCode) {
 		Room room = getRoomByCode(roomCode);
 		Map<Player, Double> playerScores = new HashMap<>();
 
@@ -291,17 +295,26 @@ public class RoomService {
 				}
 			}
 		}
-		List<Double> sortedKeys = new ArrayList<>(playerScores.values());
-		Collections.sort(sortedKeys);
+		List<Entry<Player, Double>> entryList = new ArrayList(playerScores.entrySet());
+		Collections.sort(entryList, new Comparator<Entry<Player, Double>>() {
+			@Override
+			public int compare(Entry<Player, Double> o1, Entry<Player, Double> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+
+		LinkedHashMap<Player, Double> sortedPlayers = new LinkedHashMap<>();
+		for (Entry<Player, Double> entry : entryList) {
+			sortedPlayers.put(entry.getKey(), entry.getValue());
+		}
+
 		int index = 0;
-		
-		for(Player p : playerScores.keySet()) {
+		for (Player p : sortedPlayers.keySet()) {
 			room.getPlayers()[index] = p;
 			index++;
 		}
 
 		broadcastNews(room.getRoomCode());
-		return room;
 	}
 
 	public Room getRoomByCode(String roomcode) {
@@ -309,5 +322,14 @@ public class RoomService {
 				.filter(gameHandler -> roomcode.toUpperCase().equals(gameHandler.getRoom().getRoomCode())).findFirst()
 				.orElse(null);
 		return gh != null ? gh.getRoom() : null;
+	}
+
+	public void deleteRoom(String roomCode) {
+		Room room = getRoomByCode(roomCode);
+		if(room != null) {
+			GameHandler gh = gameHandlers.stream().filter(handler -> handler.getRoom().equals(room))
+					.findFirst().get();
+			gameHandlers.remove(gh);
+		}
 	}
 }
