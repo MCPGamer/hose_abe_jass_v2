@@ -18,7 +18,7 @@ export const RoomManager: React.FC<Props> = (props) => {
         } else if (e.target.name === 'roomCode') {
             setRoomCode(e.target.value);
         }
-    }
+    };
 
     const handleOnCreate = () => {
         props.onCreate(username);
@@ -50,4 +50,4 @@ export const RoomManager: React.FC<Props> = (props) => {
             </fieldset>
         </form>
     );
-}
+};
