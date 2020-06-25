@@ -1,0 +1,27 @@
+.center-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.center-element {
+    margin: 0 auto;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.hand{
+    padding-top: 100px;
+}
+
+.inline{
+    display: inline-flex;
+}
+
+.inline button{
+    margin-left: 10px;
+    margin-right: 10px;
+}
