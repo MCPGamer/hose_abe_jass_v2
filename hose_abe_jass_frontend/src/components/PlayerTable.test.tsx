@@ -25,13 +25,13 @@ describe('PlayerTable', () => {
   it('should render a table', () => {
     const username:string = 'Test1User';
     const result = renderPlayerTable(username);
-    expect(result.container.querySelector('table').tagName).toBe('TABLE');
+    expect(result.container.querySelector('table')?.tagName).toBe('TABLE');
   });
 
   it('should set the first user as the first user in the array', () => {
     const username:string = 'Test2User';
     const result = renderPlayerTable(username);
-    expect(result.container.querySelector('table > tbody').firstChild.childNodes.item(1).textContent).toContain(username);
+    expect(result.container.querySelector('table > tbody')?.firstChild?.childNodes.item(1).textContent).toContain(username);
   });
 
   it('should render your username with " (du)" appended', () => {

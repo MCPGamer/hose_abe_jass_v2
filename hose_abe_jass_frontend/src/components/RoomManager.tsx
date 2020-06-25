@@ -6,13 +6,11 @@ type Props = {
     onCreate: (username: string) => void;
     onJoin: (username: string, roomCode: string) => void;
     errorMsg: string;
-    initialUsername?: string;
-    initialRoomCode?: string;
 }
 
 export const RoomManager: React.FC<Props> = (props) => {
-    const [username, setUsername] = useState<string>(props.initialUsername ? props.initialUsername : '');
-    const [roomCode, setRoomCode] = useState<string>(props.initialRoomCode ? props.initialRoomCode : '');
+    const [username, setUsername] = useState<string>('');
+    const [roomCode, setRoomCode] = useState<string>('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'username') {
