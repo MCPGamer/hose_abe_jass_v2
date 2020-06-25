@@ -6,11 +6,13 @@ type Props = {
     onCreate: (username: string) => void;
     onJoin: (username: string, roomCode: string) => void;
     errorMsg: string;
+    initialUsername?: string;
+    initialRoomCode?: string;
 }
 
 export const RoomManager: React.FC<Props> = (props) => {
-    const [username, setUsername] = useState<string>('');
-    const [roomCode, setRoomCode] = useState<string>('');
+    const [username, setUsername] = useState<string>(props.initialUsername ? props.initialUsername : '');
+    const [roomCode, setRoomCode] = useState<string>(props.initialRoomCode ? props.initialRoomCode : '');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'username') {
@@ -18,7 +20,7 @@ export const RoomManager: React.FC<Props> = (props) => {
         } else if (e.target.name === 'roomCode') {
             setRoomCode(e.target.value);
         }
-    }
+    };
 
     const handleOnCreate = () => {
         props.onCreate(username);
@@ -50,4 +52,4 @@ export const RoomManager: React.FC<Props> = (props) => {
             </fieldset>
         </form>
     );
-}
+};
