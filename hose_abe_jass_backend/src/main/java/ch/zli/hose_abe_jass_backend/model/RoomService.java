@@ -57,7 +57,7 @@ public class RoomService {
 		Card[] cards = generateCards();
 		shuffle(cards);
 		int countPlayers = 0;
-		
+
 		room.setTable(getFirst3Cards(cards));
 		for (Player player : room.getPlayers()) {
 			if (player != null) {
@@ -66,22 +66,22 @@ public class RoomService {
 				countPlayers++;
 			}
 		}
-		
+
 		Player[] copyList = new Player[11];
-		for(int i = 0; i < 11; i++) {
+		for (int i = 0; i < 11; i++) {
 			copyList[i] = room.getPlayers()[i];
 		}
 		room.setOriginPlayerOrder(copyList);
-		
+
 		room.setFinalRound(false);
 		room.setRoundOver(false);
-		
-		if(countPlayers == room.getRoundsPlayed()) {
+
+		if (countPlayers == room.getRoundsPlayed()) {
 			room.setRoundsPlayed(0);
 		}
-		
+
 		room.setPlayerTurn(room.getRoundsPlayed());
-		
+
 		broadcastNews(roomCode);
 		return room;
 	}
@@ -261,6 +261,7 @@ public class RoomService {
 			throw new JoinRoomException("Raum ist voll.");
 		}
 
+		room.setOriginPlayerOrder(players);
 		broadcastNews(roomCode);
 		return room;
 	}
@@ -315,7 +316,7 @@ public class RoomService {
 				}
 			}
 		}
-		
+
 		List<Entry<Player, Double>> entryList = new ArrayList(playerScores.entrySet());
 		Collections.sort(entryList, new Comparator<Entry<Player, Double>>() {
 			@Override
@@ -336,59 +337,58 @@ public class RoomService {
 		ArrayList<Player> losers = new ArrayList<>();
 		for (Player p : sortedPlayers.keySet()) {
 			room.getPlayers()[index] = p;
-			
-			if(index == 0) {
+
+			if (index == 0) {
 				maxPoints = sortedPlayers.get(p);
 				winner = p;
 			}
-			
-			if(sortedPlayers.get(p) < minPoints) {
+
+			if (sortedPlayers.get(p) < minPoints) {
 				losers = new ArrayList<>();
 				losers.add(p);
 				minPoints = sortedPlayers.get(p);
-			} else if(sortedPlayers.get(p) == minPoints){
+			} else if (sortedPlayers.get(p) == minPoints) {
 				losers.add(p);
 			}
-			
+
 			index++;
 		}
 
-		if(maxPoints == 33.00) {
-			for(Player p : room.getPlayers()) {
-				if(p != null && p != winner) {
+		if (maxPoints == 33.00) {
+			for (Player p : room.getPlayers()) {
+				if (p != null && p != winner) {
 					p.setLife(p.getLife() - 1);
-					if(p.isHasBonusLife()) {
+					if (p.isHasBonusLife()) {
 						p.setHasBonusLife(false);
 					}
 				}
 			}
 		} else {
-			for(Player p : losers) {
-				if(p.getName().contentEquals(klopfPlayer)) {
+			for (Player p : losers) {
+				if (p.getName().contentEquals(klopfPlayer)) {
 					p.setLife(p.getLife() - 2);
-					if(p.isHasBonusLife()) {
+					if (p.isHasBonusLife()) {
 						p.setHasBonusLife(false);
 					}
 				} else {
 					p.setLife(p.getLife() - 1);
-					if(p.isHasBonusLife()) {
+					if (p.isHasBonusLife()) {
 						p.setHasBonusLife(false);
 					}
 				}
 			}
 		}
-		
-		
+
 		eradicatePlayerFromExistence(room);
-		
+
 		broadcastNews(room.getRoomCode());
 	}
 
 	private void eradicatePlayerFromExistence(Room room) {
 		Player[] players = room.getOriginPlayerOrder();
-		for(int i = 0; i < 11; i++) {
-			if(players[i] != null) {
-				if(players[i].getLife() <= 0 && !players[i].isHasBonusLife()) {
+		for (int i = 0; i < 11; i++) {
+			if (players[i] != null) {
+				if (players[i].getLife() <= 0 && !players[i].isHasBonusLife()) {
 					players[i] = null;
 				}
 			}
@@ -397,18 +397,18 @@ public class RoomService {
 		Player[] alivePlayers = new Player[11];
 		int index = 0;
 		for (int i = 0; i < 11; i++) {
-		    if (players[i] != null) {
-		        alivePlayers[index++] = players[i];
-		    }
+			if (players[i] != null) {
+				alivePlayers[index++] = players[i];
+			}
 		}
-		
+
 		room.setOriginPlayerOrder(alivePlayers);
-		
-		if(alivePlayers[1] == null) {
+
+		if (alivePlayers[1] == null) {
 			room.setGameOver(true);
 		}
 
-		//TODO: Impl. setting of Bonuslife and setting as checked in room
+		// TODO: Impl. setting of Bonuslife and setting as checked in room
 	}
 
 	public Room getRoomByCode(String roomcode) {
@@ -420,19 +420,52 @@ public class RoomService {
 
 	public void deleteRoom(String roomCode) {
 		Room room = getRoomByCode(roomCode);
-		if(room != null) {
-			GameHandler gh = gameHandlers.stream().filter(handler -> handler.getRoom().equals(room))
-					.findFirst().get();
+		if (room != null) {
+			GameHandler gh = gameHandlers.stream().filter(handler -> handler.getRoom().equals(room)).findFirst().get();
 			gameHandlers.remove(gh);
 		}
 	}
 
 	public Room startRound(String roomCode) {
 		Room room = getRoomByCode(roomCode);
-		
+
 		room.setPlayers(room.getOriginPlayerOrder());
 		room.setRoundsPlayed(room.getRoundsPlayed() + 1);
-		
+
 		return startGame(roomCode);
+	}
+
+	public Room kick(String roomCode, String name) {
+		Room room = getRoomByCode(roomCode);
+
+		Player[] players = room.getOriginPlayerOrder();
+		int countPlayers = 0;
+		for (int i = 0; i < 11; i++) {
+			if (players[i] != null) {
+				if(players[i].getName().equals(name)) {
+					players[i] = null;
+				} else {
+					countPlayers++;
+				}
+			}
+		}
+		
+		Player[] alivePlayers = new Player[11];
+		int index = 0;
+		for (int i = 0; i < 11; i++) {
+			if (players[i] != null) {
+				alivePlayers[index++] = players[i];
+			}
+		}
+		
+		room.setOriginPlayerOrder(alivePlayers);
+		room.setPlayers(alivePlayers);
+		
+		if(room.getPlayerTurn() > (countPlayers - 1)) {
+			room.setPlayerTurn(0);
+		}
+		
+		broadcastNews(roomCode);
+		return room;
 	}
 }

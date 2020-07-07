@@ -17,11 +17,13 @@ type Props = {
 
 export const GameScreenContainer: React.FC<Props> = (props) => {
   const [enabled, setEnabled] = useState<boolean>(false);
+  const [isHost, setIsHost] = useState<boolean>(false);
   const [player, setPlayer] = useState<Player>({name: '', cards: [], finalTurnPlayed: false, life:3, hasBonusLife:false});
   const [swapCard, setSwapCard] = useState<Card>(defaultCard);
 
   useEffect(() => {
     setEnabled(props.room.players[props.room.playerTurn].name === props.player);
+    setIsHost(props.player === props.room.host.name);
     const player = props.room.players.find((p) => p.name === props.player);
     if (player !== undefined) {
       setPlayer(player);
@@ -104,12 +106,13 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
   };
 
   const kick = (name:string) => {
-
+    fetch(`http://${props.backendUrl}/room/kick/${props.room.roomCode}/${name}`, {method: 'POST'})
+        .then(response => response.json());
   }
 
   return (
       <div className="center-form">
-        <PlayerTable room={props.room} player={props.player} revealCards={props.room.roundOver} isHost={props.room.host.name === props.player} onKick={kick}/>
+        <PlayerTable room={props.room} player={props.player} revealCards={props.room.roundOver} isHost={isHost} onKick={kick}/>
         {props.room.gameOver ? (
             <div className={'center-text'}>
               <p>Die Spiel ist fertig, Glückwunsch {props.room.players[0].name}</p>

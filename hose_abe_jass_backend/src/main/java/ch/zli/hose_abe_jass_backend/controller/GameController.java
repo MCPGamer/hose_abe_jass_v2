@@ -61,4 +61,9 @@ public class GameController {
   public Room startRound(@PathVariable String roomCode) {
     return roomService.startRound(roomCode);
   }
+  
+  @PostMapping("/room/kick/{roomCode}/{name}")
+  public Room kick(@PathVariable String roomCode, @PathVariable String name) {
+    return roomService.kick(roomCode, name);
+  }
 }

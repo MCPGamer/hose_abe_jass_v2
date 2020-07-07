@@ -17,6 +17,7 @@ public class Room {
 		this.roomCode = roomCode;
 		this.host = host;
 		this.players[0] = host;
+		this.originPlayerOrder[0] = host;
 	}
 
 	public String getRoomCode() {

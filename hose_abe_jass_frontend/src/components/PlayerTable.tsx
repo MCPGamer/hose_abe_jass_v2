@@ -1,6 +1,7 @@
 import React from 'react';
 import './PlayerTable.css';
 import {Room} from '../models/room';
+import {Button} from "@material-ui/core";
 
 type Props = {
     room: Room;
@@ -35,7 +36,7 @@ export const PlayerTable: React.FC<Props> = (props) => {
                                 {p.finalTurnPlayed ? ' Klopft' : ''}
                             </td>
                             {props.isHost ? <td>
-                                <button onClick={() => kick(p.name)}>Kick</button>
+                                <Button variant={'outlined'} onClick={() => kick(p.name)}>Kick</Button>
                             </td> : ''}
                             <td>
                                 {props.revealCards ? p.cards.map((c) => (
