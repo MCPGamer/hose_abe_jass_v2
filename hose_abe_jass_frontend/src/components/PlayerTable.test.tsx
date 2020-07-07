@@ -10,12 +10,16 @@ describe('PlayerTable', () => {
       {
         finalTurnPlayed: false,
         cards: [],
-        name: username
+        name: username,
+        life:3,
+        hasBonusLife:false
       },
       {
         finalTurnPlayed: false,
         cards: [],
-        name: 'User2'
+        name: 'User2',
+        life:3,
+        hasBonusLife:false
       }
     ];
 

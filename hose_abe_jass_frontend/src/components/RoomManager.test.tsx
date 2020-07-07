@@ -1,7 +1,6 @@
 import React from 'react';
 import {fireEvent, render} from '@testing-library/react';
 import {RoomManager} from './RoomManager';
-import { StateMock } from '@react-mock/state';
 
 describe('RoomManager', () => {
     const renderRoomManager = ( onJoin: (username: string, roomCode: string) => void, onCreate: (username: string) => void) => {

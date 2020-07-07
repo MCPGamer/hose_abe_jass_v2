@@ -56,4 +56,9 @@ public class GameController {
   public void closeRoom(@PathVariable String roomCode) {
 	  roomService.deleteRoom(roomCode);
   }
+  
+  @PostMapping("/room/round/{roomCode}")
+  public Room startRound(@PathVariable String roomCode) {
+    return roomService.startRound(roomCode);
+  }
 }

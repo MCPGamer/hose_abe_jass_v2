@@ -56,12 +56,32 @@ public class RoomService {
 		Room room = getRoomByCode(roomCode);
 		Card[] cards = generateCards();
 		shuffle(cards);
+		int countPlayers = 0;
+		
 		room.setTable(getFirst3Cards(cards));
 		for (Player player : room.getPlayers()) {
 			if (player != null) {
 				player.setCards(getFirst3Cards(cards));
+				player.setFinalTurnPlayed(false);
+				countPlayers++;
 			}
 		}
+		
+		Player[] copyList = new Player[11];
+		for(int i = 0; i < 11; i++) {
+			copyList[i] = room.getPlayers()[i];
+		}
+		room.setOriginPlayerOrder(copyList);
+		
+		room.setFinalRound(false);
+		room.setRoundOver(false);
+		
+		if(countPlayers == room.getRoundsPlayed()) {
+			room.setRoundsPlayed(0);
+		}
+		
+		room.setPlayerTurn(room.getRoundsPlayed());
+		
 		broadcastNews(roomCode);
 		return room;
 	}
@@ -204,8 +224,8 @@ public class RoomService {
 		}
 
 		if (room.getPlayers()[room.getPlayerTurn()].isFinalTurnPlayed()) {
-			room.setGameOver(true);
-			finishGame(room.getRoomCode());
+			room.setRoundOver(true);
+			finishRound(room.getRoomCode(), countPlayers, room.getPlayers()[room.getPlayerTurn()].getName());
 		}
 	}
 
@@ -245,7 +265,7 @@ public class RoomService {
 		return room;
 	}
 
-	public void finishGame(String roomCode) {
+	public void finishRound(String roomCode, int playerCount, String klopfPlayer) {
 		Room room = getRoomByCode(roomCode);
 		Map<Player, Double> playerScores = new HashMap<>();
 
@@ -295,6 +315,7 @@ public class RoomService {
 				}
 			}
 		}
+		
 		List<Entry<Player, Double>> entryList = new ArrayList(playerScores.entrySet());
 		Collections.sort(entryList, new Comparator<Entry<Player, Double>>() {
 			@Override
@@ -309,12 +330,85 @@ public class RoomService {
 		}
 
 		int index = 0;
+		double maxPoints = 0;
+		double minPoints = 100.00;
+		Player winner = null;
+		ArrayList<Player> losers = new ArrayList<>();
 		for (Player p : sortedPlayers.keySet()) {
 			room.getPlayers()[index] = p;
+			
+			if(index == 0) {
+				maxPoints = sortedPlayers.get(p);
+				winner = p;
+			}
+			
+			if(sortedPlayers.get(p) < minPoints) {
+				losers = new ArrayList<>();
+				losers.add(p);
+				minPoints = sortedPlayers.get(p);
+			} else if(sortedPlayers.get(p) == minPoints){
+				losers.add(p);
+			}
+			
 			index++;
 		}
 
+		if(maxPoints == 33.00) {
+			for(Player p : room.getPlayers()) {
+				if(p != null && p != winner) {
+					p.setLife(p.getLife() - 1);
+					if(p.isHasBonusLife()) {
+						p.setHasBonusLife(false);
+					}
+				}
+			}
+		} else {
+			for(Player p : losers) {
+				if(p.getName().contentEquals(klopfPlayer)) {
+					p.setLife(p.getLife() - 2);
+					if(p.isHasBonusLife()) {
+						p.setHasBonusLife(false);
+					}
+				} else {
+					p.setLife(p.getLife() - 1);
+					if(p.isHasBonusLife()) {
+						p.setHasBonusLife(false);
+					}
+				}
+			}
+		}
+		
+		
+		eradicatePlayerFromExistence(room);
+		
 		broadcastNews(room.getRoomCode());
+	}
+
+	private void eradicatePlayerFromExistence(Room room) {
+		Player[] players = room.getOriginPlayerOrder();
+		for(int i = 0; i < 11; i++) {
+			if(players[i] != null) {
+				if(players[i].getLife() <= 0 && !players[i].isHasBonusLife()) {
+					players[i] = null;
+				}
+			}
+		}
+
+		Player[] alivePlayers = new Player[11];
+		int index = 0;
+		for (int i = 0; i < 11; i++) {
+		    if (players[i] != null) {
+		        alivePlayers[index++] = players[i];
+		    }
+		}
+		
+		room.setOriginPlayerOrder(alivePlayers);
+		
+		if(alivePlayers[1] == null) {
+			room.setGameOver(true);
+		}
+
+		//TODO: Impl. setting of Bonuslife and setting as checked in room
 	}
 
 	public Room getRoomByCode(String roomcode) {
@@ -331,5 +425,14 @@ public class RoomService {
 					.findFirst().get();
 			gameHandlers.remove(gh);
 		}
+	}
+
+	public Room startRound(String roomCode) {
+		Room room = getRoomByCode(roomCode);
+		
+		room.setPlayers(room.getOriginPlayerOrder());
+		room.setRoundsPlayed(room.getRoundsPlayed() + 1);
+		
+		return startGame(roomCode);
 	}
 }

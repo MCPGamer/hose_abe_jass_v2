@@ -5,10 +5,14 @@ export type Room = {
     roomCode: string,
     host: Player,
     players: Player[],
+    originPlayerOrder: Player[],
     table: Card[],
     finalRound: boolean,
     playerTurn: number,
-    gameOver: boolean;
+    gameOver: boolean,
+    roundOver: boolean,
+    bonusLifeUsed: boolean,
+    roundsPlayed:number
 }
 
 export const defaultRoom: Room = {
@@ -16,11 +20,17 @@ export const defaultRoom: Room = {
     host: {
         cards: [],
         name: '',
-        finalTurnPlayed: false
+        finalTurnPlayed: false,
+        life:3,
+        hasBonusLife:false
     },
     players: [],
+    originPlayerOrder: [],
     table: [],
     finalRound: false,
     playerTurn: 0,
-    gameOver: false
+    gameOver: false,
+    roundOver: false,
+    bonusLifeUsed:false,
+    roundsPlayed:0
 };

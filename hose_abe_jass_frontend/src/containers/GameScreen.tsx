@@ -17,7 +17,7 @@ type Props = {
 
 export const GameScreenContainer: React.FC<Props> = (props) => {
   const [enabled, setEnabled] = useState<boolean>(false);
-  const [player, setPlayer] = useState<Player>({name: '', cards: [], finalTurnPlayed: false});
+  const [player, setPlayer] = useState<Player>({name: '', cards: [], finalTurnPlayed: false, life:3, hasBonusLife:false});
   const [swapCard, setSwapCard] = useState<Card>(defaultCard);
 
   useEffect(() => {
@@ -97,13 +97,28 @@ export const GameScreenContainer: React.FC<Props> = (props) => {
     props.handleSetRoom(defaultRoom);
   };
 
+  const nextRound = () => {
+    fetch(`http://${props.backendUrl}/room/round/${props.room.roomCode}`, {method: 'POST'})
+        .then(response => response.json())
+        .then(room => props.handleSetRoom(room));
+  };
+
+  const kick = (name:string) => {
+
+  }
+
   return (
       <div className="center-form">
-        <PlayerTable room={props.room} player={props.player} revealCards={props.room.gameOver}/>
+        <PlayerTable room={props.room} player={props.player} revealCards={props.room.roundOver} isHost={props.room.host.name === props.player} onKick={kick}/>
         {props.room.gameOver ? (
             <div className={'center-text'}>
-              <p>Die Runde ist beendet</p>
+              <p>Die Spiel ist fertig, Glückwunsch {props.room.players[0].name}</p>
               <Button variant={'outlined'} onClick={backToMainMenu}>Zurück zum Hauptmenü</Button>
+            </div>
+        ) : props.room.roundOver ? (
+            <div className={'center-text'}>
+              <p>Die Runde ist fertig</p>
+              <Button variant={'outlined'} disabled={!enabled} onClick={nextRound}>Nächste Runde</Button>
             </div>
         ) : props.room.table.filter((c) => c !== null).length !== 0 ? (
             <div className={'center-text'}>

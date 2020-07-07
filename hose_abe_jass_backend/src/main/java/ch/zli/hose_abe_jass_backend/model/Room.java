@@ -4,10 +4,14 @@ public class Room {
 	private String roomCode;
 	private Player host;
 	private Player[] players = new Player[11];
+	private Player[] originPlayerOrder = new Player[11];
 	private Card[] table = new Card[3];
 	private boolean finalRound = false;
 	private boolean gameOver = false;
+	private boolean roundOver = false;
 	private int playerTurn = 0;
+	private boolean bonusLifeUsed = false;
+	private int roundsPlayed = 0;
 	
 	public Room(String roomCode, Player host) {
 		this.roomCode = roomCode;
@@ -39,6 +43,14 @@ public class Room {
 		this.players = players;
 	}
 
+	public Player[] getOriginPlayerOrder() {
+		return originPlayerOrder;
+	}
+
+	public void setOriginPlayerOrder(Player[] originPlayerOrder) {
+		this.originPlayerOrder = originPlayerOrder;
+	}
+
 	public Card[] getTable() {
 		return table;
 	}
@@ -63,11 +75,35 @@ public class Room {
 		this.gameOver = gameOver;
 	}
 	
+	public boolean isRoundOver() {
+		return roundOver;
+	}
+
+	public void setRoundOver(boolean roundOver) {
+		this.roundOver = roundOver;
+	}
+
 	public int getPlayerTurn() {
 		return playerTurn;
 	}
 
 	public void setPlayerTurn(int playerturn) {
 		this.playerTurn = playerturn;
+	}
+
+	public boolean isBonusLifeUsed() {
+		return bonusLifeUsed;
+	}
+
+	public void setBonusLifeUsed(boolean bonusLifeUsed) {
+		this.bonusLifeUsed = bonusLifeUsed;
+	}
+
+	public int getRoundsPlayed() {
+		return roundsPlayed;
+	}
+
+	public void setRoundsPlayed(int roundsPlayed) {
+		this.roundsPlayed = roundsPlayed;
 	}
 }
